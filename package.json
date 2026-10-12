@@ -1,0 +1,44 @@
+{
+  "name": "remindflow-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:cloud": "node scripts/cloud-build.mjs",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:seed": "node scripts/seed.mjs",
+    "db:generate": "prisma generate",
+    "db:export-json": "node scripts/cloud-data-sync.mjs export",
+    "db:import-json": "node scripts/cloud-data-sync.mjs import",
+    "db:migrate-to-cloud": "npx prisma generate --schema=prisma/schema.postgres.prisma && npx prisma db push --schema=prisma/schema.postgres.prisma --skip-generate && node scripts/cloud-data-sync.mjs import",
+    "worker": "node scripts/worker.mjs",
+    "server:start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-remindflow.ps1 -Background -NoBrowser",
+    "server:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stop-remindflow.ps1",
+    "server:controller": "node scripts/server-controller.mjs --autostart",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.21.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "lucide-react": "^0.453.0",
+    "next": "14.2.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "prisma": "^5.21.1",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.3"
+  }
+}

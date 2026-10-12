@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Environment variables & secrets (NEVER commit .env)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Local SQLite database & backups
+prisma/*.db
+prisma/*.db-journal
+backups/*.db
+backups/*.json
+
+# Logs & temporary files
+*.log
+remindflow-server.log
+remindflow-server.err.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+tsconfig.tsbuildinfo
+.DS_Store
+Thumbs.db

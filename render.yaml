@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: remindflow-ai
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build:cloud
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_APP_NAME
+        value: RemindFlow AI
+      - key: DATABASE_URL
+        sync: false
+      - key: WORKSPACE_ACCESS_PASSCODE
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true

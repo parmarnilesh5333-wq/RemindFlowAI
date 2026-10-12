@@ -1,0 +1,238 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String      @id @default(cuid())
+  email           String      @unique
+  name            String
+  role            String      @default("ADMIN")
+  defaultLanguage String      @default("en")
+  defaultTimezone String      @default("Asia/Kolkata")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  contacts        Contact[]
+  groups          Group[]
+  campaigns       Campaign[]
+  templates       Template[]
+  auditLogs       AuditLog[]
+  settings        Settings?
+}
+
+model Contact {
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String
+  phone            String
+  email            String?
+  roleOrGrade      String?
+  notes            String?
+  consentStatus    String            @default("GRANTED") // "GRANTED" | "REVOKED" | "PENDING"
+  consentSource    String?
+  consentTimestamp DateTime?
+  optOutStatus     Boolean           @default(false)
+  optOutReason     String?
+  optOutAt         DateTime?
+  customAttributes String?           // JSON
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  groupMemberships GroupMembership[]
+  consentRecords   ConsentRecord[]
+  recipients       CampaignRecipient[]
+
+  @@index([userId, phone])
+  @@index([consentStatus])
+  @@index([optOutStatus])
+}
+
+model Group {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  color       String            @default("#0D9488")
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  memberships GroupMembership[]
+  campaigns   Campaign[]
+
+  @@unique([userId, name])
+}
+
+model GroupMembership {
+  id        String   @id @default(cuid())
+  contactId String
+  contact   Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([contactId, groupId])
+  @@index([groupId])
+}
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+  contactId   String
+  contact     Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  status      String   // "GRANTED" | "REVOKED"
+  source      String
+  ipAddress   String?
+  notes       String?
+  recordedBy  String?
+  timestamp   DateTime @default(now())
+
+  @@index([contactId])
+}
+
+model OptOut {
+  id        String   @id @default(cuid())
+  phone     String   @unique
+  reason    String?
+  source    String   @default("KEYWORD_STOP")
+  timestamp DateTime @default(now())
+
+  @@index([phone])
+}
+
+model Template {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name               String
+  category           String   @default("UTILITY")
+  language           String   @default("en")
+  content            String
+  variables          String?  // JSON string array
+  status             String   @default("APPROVED")
+  whatsappTemplateId String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId, name])
+}
+
+model Campaign {
+  id              String              @id @default(cuid())
+  userId          String
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  objective       String?
+  targetGroupId   String?
+  targetGroup     Group?              @relation(fields: [targetGroupId], references: [id], onDelete: SetNull)
+  status          String              @default("DRAFT") // DRAFT, SCHEDULED, PROCESSING, COMPLETED, FAILED, CANCELLED
+  language        String              @default("en")
+  originalPrompt  String?
+  messageContent  String
+  variablesUsed   String?             // JSON array
+  scheduledAt     DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  totalRecipients Int                 @default(0)
+  successfulCount Int                 @default(0)
+  failedCount     Int                 @default(0)
+  duplicateHash   String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  recipients      CampaignRecipient[]
+  scheduledJobs   ScheduledJob[]
+  messageLogs     MessageLog[]
+
+  @@index([userId, status])
+  @@index([scheduledAt])
+}
+
+model CampaignRecipient {
+  id                  String    @id @default(cuid())
+  campaignId          String
+  campaign            Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contactId           String
+  contact             Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  phoneSnapshot       String
+  nameSnapshot        String
+  personalizedMessage String
+  status              String    @default("QUEUED") // QUEUED, SENT, DELIVERED, READ, FAILED, OPTED_OUT_SKIPPED
+  providerMessageId   String?
+  errorMessage        String?
+  errorCode           String?
+  sentAt              DateTime?
+  deliveredAt         DateTime?
+  readAt              DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([campaignId, contactId])
+  @@index([campaignId, status])
+  @@index([providerMessageId])
+}
+
+model MessageLog {
+  id               String    @id @default(cuid())
+  campaignId       String?
+  campaign         Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  recipientId      String?
+  phone            String
+  direction        String    @default("OUTBOUND")
+  status           String
+  payloadMasked    String?   // JSON
+  providerResponse String?   // JSON
+  createdAt        DateTime  @default(now())
+
+  @@index([campaignId])
+  @@index([phone])
+}
+
+model ScheduledJob {
+  id          String    @id @default(cuid())
+  campaignId  String
+  campaign    Campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  runAt       DateTime
+  status      String    @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  retryCount  Int       @default(0)
+  maxRetries  Int       @default(3)
+  lastError   String?
+  lockedAt    DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, runAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  details    String?  // JSON
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, action])
+  @@index([createdAt])
+}
+
+model Settings {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  defaultTimezone     String   @default("Asia/Kolkata")
+  defaultLanguage     String   @default("en")
+  simulationMode      Boolean  @default(true)
+  autoConsentOnImport Boolean  @default(false)
+  optOutKeywords      String   @default("STOP,UNSUBSCRIBE,CANCEL")
+  updatedAt           DateTime @updatedAt
+}

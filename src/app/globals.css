@@ -1,0 +1,385 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #050811;
+  --foreground: #f8fafc;
+  --surface-primary: #060913;
+  --surface-secondary: #080c18;
+  --surface-card: #0b1120;
+  --surface-elevated: #0f172a;
+  --border-subtle: rgba(148, 163, 184, 0.12);
+  --border-highlight: rgba(99, 102, 241, 0.35);
+  --accent-blue: #3b82f6;
+  --accent-indigo: #6366f1;
+  --accent-violet: #8b5cf6;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.32);
+  color: #f8fafc;
+}
+
+/* Accessible Focus Ring */
+:focus-visible {
+  outline: 2px solid rgba(96, 165, 250, 0.85);
+  outline-offset: 2px;
+}
+
+/* Dark SaaS Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #060913;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* ============================================================================
+   DESIGN SYSTEM SURFACE TOKENS & GLASS PANELS
+============================================================================ */
+.glass-panel {
+  background: rgba(11, 17, 32, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+}
+
+.futuristic-canvas {
+  background-color: #050811;
+  background-image:
+    radial-gradient(ellipse 75% 48% at 50% -8%, rgba(37, 99, 235, 0.18) 0%, rgba(99, 102, 241, 0.11) 42%, transparent 75%),
+    radial-gradient(ellipse 50% 40% at 85% 22%, rgba(139, 92, 246, 0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 15% 32%, rgba(37, 99, 235, 0.08) 0%, transparent 70%),
+    linear-gradient(180deg, #050811 0%, #080d1a 48%, #060913 100%);
+}
+
+.futuristic-grid-overlay {
+  background-size: 52px 52px;
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 82% 65% at 50% 30%, #000 30%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse 82% 65% at 50% 30%, #000 30%, transparent 82%);
+}
+
+.futuristic-nav-surface {
+  background: rgba(8, 12, 24, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  box-shadow:
+    0 16px 36px -12px rgba(2, 6, 23, 0.7),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+}
+
+.futuristic-glass-panel {
+  background: linear-gradient(
+    165deg,
+    rgba(15, 23, 42, 0.88) 0%,
+    rgba(9, 13, 26, 0.94) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow:
+    0 32px 64px -16px rgba(2, 6, 23, 0.82),
+    0 0 44px -12px rgba(59, 130, 246, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.09);
+}
+
+.futuristic-glass-card {
+  background: linear-gradient(
+    160deg,
+    rgba(15, 23, 42, 0.78) 0%,
+    rgba(10, 15, 29, 0.9) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  box-shadow:
+    0 18px 38px -12px rgba(2, 6, 23, 0.65),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.futuristic-glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.38);
+  box-shadow:
+    0 24px 48px -12px rgba(2, 6, 23, 0.8),
+    0 0 28px -8px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-luxury {
+  background: #0b1120;
+  border: 1px solid rgba(30, 41, 59, 0.85);
+  box-shadow:
+    0 8px 24px -4px rgba(2, 6, 23, 0.55),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+
+.card-luxury:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 12px 32px -4px rgba(2, 6, 23, 0.7),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================================================
+   3D DIMENSIONAL HERO SCULPTURE & FLOATING REMINDER CARDS
+============================================================================ */
+.scene-3d {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.saas-3d-card {
+  background: linear-gradient(
+    145deg,
+    rgba(17, 25, 46, 0.92) 0%,
+    rgba(10, 15, 29, 0.96) 100%
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow:
+    0 24px 48px -12px rgba(2, 6, 23, 0.85),
+    0 0 24px -6px rgba(59, 130, 246, 0.16),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+.saas-3d-core {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(30, 58, 138, 0.55) 0%,
+    rgba(15, 23, 42, 0.95) 55%,
+    rgba(6, 9, 19, 0.98) 100%
+  );
+  border: 1px solid rgba(96, 165, 250, 0.32);
+  box-shadow:
+    0 32px 64px -12px rgba(2, 6, 23, 0.9),
+    0 0 50px -10px rgba(59, 130, 246, 0.28),
+    inset 0 2px 3px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -4px 12px 0 rgba(99, 102, 241, 0.22);
+}
+
+/* Perspective-Angled Floating 3D Cards */
+@keyframes floatCardLeft1 {
+  0%,
+  100% {
+    transform: perspective(1200px) rotateY(14deg) rotateX(5deg) rotateZ(-1.5deg) translate3d(0, 0px, 24px);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(12deg) rotateX(7deg) rotateZ(-0.5deg) translate3d(0, -10px, 34px);
+  }
+}
+
+@keyframes floatCardRight1 {
+  0%,
+  100% {
+    transform: perspective(1200px) rotateY(-14deg) rotateX(5deg) rotateZ(1.5deg) translate3d(0, 0px, 28px);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-12deg) rotateX(3deg) rotateZ(0.5deg) translate3d(0, -11px, 38px);
+  }
+}
+
+@keyframes floatCardLeft2 {
+  0%,
+  100% {
+    transform: perspective(1200px) rotateY(11deg) rotateX(5deg) rotateZ(1deg) translate3d(0, 0px, 12px);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(13deg) rotateX(3deg) rotateZ(2deg) translate3d(0, 8px, 20px);
+  }
+}
+
+@keyframes floatCardRight2 {
+  0%,
+  100% {
+    transform: perspective(1200px) rotateY(-11deg) rotateX(5deg) rotateZ(-1deg) translate3d(0, 0px, 16px);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-13deg) rotateX(3deg) rotateZ(-2deg) translate3d(0, 7px, 24px);
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0px, 0px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translate3d(0, -8px, 12px) rotateX(2deg) rotateY(-2deg);
+  }
+}
+
+@keyframes orbitPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes heroFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-card-left-1 {
+  animation: floatCardLeft1 7.5s ease-in-out infinite;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
+}
+
+.animate-card-left-1:hover {
+  animation-play-state: paused;
+  border-color: rgba(96, 165, 250, 0.45);
+  transform: perspective(1200px) rotateY(5deg) rotateX(2deg) rotateZ(0deg) translate3d(0, -4px, 40px) scale(1.02);
+}
+
+.animate-card-right-1 {
+  animation: floatCardRight1 8.2s ease-in-out infinite;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
+}
+
+.animate-card-right-1:hover {
+  animation-play-state: paused;
+  border-color: rgba(139, 92, 246, 0.45);
+  transform: perspective(1200px) rotateY(-5deg) rotateX(2deg) rotateZ(0deg) translate3d(0, -4px, 40px) scale(1.02);
+}
+
+.animate-card-left-2 {
+  animation: floatCardLeft2 9s ease-in-out infinite;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
+}
+
+.animate-card-left-2:hover {
+  animation-play-state: paused;
+  border-color: rgba(99, 102, 241, 0.45);
+  transform: perspective(1200px) rotateY(4deg) rotateX(2deg) rotateZ(0deg) translate3d(0, -4px, 34px) scale(1.02);
+}
+
+.animate-card-right-2 {
+  animation: floatCardRight2 8.6s ease-in-out infinite;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease;
+}
+
+.animate-card-right-2:hover {
+  animation-play-state: paused;
+  border-color: rgba(52, 211, 153, 0.45);
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) rotateZ(0deg) translate3d(0, -4px, 34px) scale(1.02);
+}
+
+.animate-float-slow {
+  animation: floatSlow 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-orbit-pulse {
+  animation: orbitPulse 5s ease-in-out infinite;
+}
+
+.animate-hero-enter {
+  animation: heroFadeInUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-hero-enter-delay-1 {
+  animation: heroFadeInUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.animate-hero-enter-delay-2 {
+  animation: heroFadeInUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+/* Reduced Motion Support (OS preference or user toggle) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-card-left-1,
+  .animate-card-right-1,
+  .animate-card-left-2,
+  .animate-card-right-2,
+  .animate-float-slow,
+  .animate-orbit-pulse,
+  .animate-hero-enter,
+  .animate-hero-enter-delay-1,
+  .animate-hero-enter-delay-2,
+  .animate-fadeIn {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+.reduce-motion-active .animate-card-left-1,
+.reduce-motion-active .animate-card-right-1,
+.reduce-motion-active .animate-card-left-2,
+.reduce-motion-active .animate-card-right-2,
+.reduce-motion-active .animate-float-slow,
+.reduce-motion-active .animate-orbit-pulse,
+.reduce-motion-active .animate-hero-enter,
+.reduce-motion-active .animate-hero-enter-delay-1,
+.reduce-motion-active .animate-hero-enter-delay-2 {
+  animation: none !important;
+  transform: none !important;
+}
